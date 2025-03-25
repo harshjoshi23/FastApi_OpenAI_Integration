@@ -1,4 +1,5 @@
-fastapi 
-unicorn 
-openapi 
+fastapi
+uvicorn
+openai
 python-dotenv
+requests
