@@ -13,6 +13,11 @@ class Product(BaseModel):
     name: str
     notes: str
 
+# Root endpoint
+@app.get("/")
+async def root():
+    return {"message": "Welcome to FastApi_OpenAI_Integration! Use /docs to explore the API."}
+
 # Basic GET endpoints
 @app.get("/ok")
 async def ok_endpoint():
