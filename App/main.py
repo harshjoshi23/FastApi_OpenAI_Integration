@@ -1,5 +1,7 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from typing import Annotated
+
+from fastapi import FastAPI, Query
+from pydantic import BaseModel, Field
 from utils import generate_description
 
 app = FastAPI()
@@ -7,7 +9,7 @@ app = FastAPI()
 # Data models
 class Order(BaseModel):
     product: str
-    units: int
+    units: int = Field(gt=0)
 
 class Product(BaseModel):
     name: str
@@ -29,7 +31,7 @@ async def hello_endpoint(name: str = "World"):
 
 # POST endpoints for orders
 @app.post("/orders")
-async def place_order(product: str, units: int):
+async def place_order(product: str, units: Annotated[int, Query(gt=0)]):
     return {"message": f"Order for {units} units of {product} placed successfully."}
 
 @app.post("/orders_pydantic")
