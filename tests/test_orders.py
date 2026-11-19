@@ -14,6 +14,7 @@ class OrderValidationTest(unittest.TestCase):
     def setUp(self):
         provider = types.ModuleType("utils")
         provider.generate_description = lambda prompt: "test description"
+        provider.DescriptionNotConfigured = type("DescriptionNotConfigured", (RuntimeError,), {})
         spec = importlib.util.spec_from_file_location(
             "order_api", Path(__file__).resolve().parents[1] / "App" / "main.py"
         )
