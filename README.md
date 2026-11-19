@@ -20,3 +20,10 @@ This project builds a RESTful API using FastAPI and integrates it with OpenAI's 
    ```bash
    git clone https://github.com/harshjoshi23/FastApi_OpenAI_Integration.git
    cd FastApi_OpenAI_Integration
+## Provider configuration
+
+The API starts without an OpenAI key. Health checks, API documentation and order
+routes remain available. Product generation returns HTTP 503 until
+`OPENAI_API_KEY` is set in the deployment environment or local `.env` file.
+The provider client is created only for a generation request and closed after
+that request. From the repository root, run `uvicorn App.main:app`.

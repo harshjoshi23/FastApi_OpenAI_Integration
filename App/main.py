@@ -1,8 +1,11 @@
 from typing import Annotated
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
-from utils import generate_description
+if __package__:
+    from .utils import DescriptionNotConfigured, generate_description
+else:
+    from utils import DescriptionNotConfigured, generate_description
 
 app = FastAPI()
 
@@ -40,6 +43,9 @@ async def place_order_pydantic(order: Order):
 
 # POST endpoint for product description with OpenAI
 @app.post("/product_description")
-async def generate_product_description(product: Product):
-    description = generate_description(f"Product name: {product.name}, Notes: {product.notes}")
+def generate_product_description(product: Product):
+    try:
+        description = generate_description(f"Product name: {product.name}, Notes: {product.notes}")
+    except DescriptionNotConfigured as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
     return {"product_description": description}
