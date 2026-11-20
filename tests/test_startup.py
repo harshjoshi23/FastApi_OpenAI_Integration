@@ -45,5 +45,5 @@ class StartupTest(unittest.TestCase):
                 response = self.client.post("/product_description", json={"name": "Book", "notes": "Hardcover"})
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.json(), {"product_description": "Description"})
-                constructor.assert_called_once_with(api_key="test-key")
+                constructor.assert_called_once_with(api_key="test-key", timeout=20.0, max_retries=0)
                 constructor.return_value.__exit__.assert_called_once()

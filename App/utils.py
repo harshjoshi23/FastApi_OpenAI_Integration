@@ -16,7 +16,7 @@ def generate_description(input):
          "content": """As a Product Description Generator, Generate multi paragraph rich text product description with emojis from the information provided to you' \n"""},
     ]
     messages.append({"role": "user", "content": f"{input}"})
-    with openai.OpenAI(api_key=api_key) as client:
+    with openai.OpenAI(api_key=api_key, timeout=20.0, max_retries=0) as client:
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages
