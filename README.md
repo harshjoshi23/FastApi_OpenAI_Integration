@@ -47,3 +47,11 @@ Regression tests exercise the real route with simulated SDK exceptions and no
 external calls: `python -m pytest tests -q`. Live provider validation still
 requires a configured account and is not covered by these tests.
 SDK behavior reference: [official OpenAI Python documentation](https://developers.openai.com/api/reference/python).
+
+### Product input limits
+
+Product names must contain 1–200 characters after trimming surrounding
+whitespace. Notes may be empty and accept up to 4,000 characters after trimming.
+Invalid input returns HTTP 422 before the generation provider is called; limits
+also appear in `/openapi.json`. These field limits bound prompt input size,
+but are not a replacement for request-body limits or caller rate limiting.

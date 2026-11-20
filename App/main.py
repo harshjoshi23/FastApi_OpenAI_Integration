@@ -3,7 +3,7 @@ from typing import Annotated
 import openai
 
 from fastapi import FastAPI, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StringConstraints
 if __package__:
     from .utils import DescriptionNotConfigured, generate_description
 else:
@@ -17,8 +17,8 @@ class Order(BaseModel):
     units: int = Field(gt=0)
 
 class Product(BaseModel):
-    name: str
-    notes: str
+    name: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200)]
+    notes: Annotated[str, StringConstraints(strip_whitespace=True, max_length=4000)]
 
 # Root endpoint
 @app.get("/")
