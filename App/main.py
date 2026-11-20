@@ -1,5 +1,7 @@
 from typing import Annotated
 
+import openai
+
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 if __package__:
@@ -48,4 +50,11 @@ def generate_product_description(product: Product):
         description = generate_description(f"Product name: {product.name}, Notes: {product.notes}")
     except DescriptionNotConfigured as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
+    except openai.APITimeoutError as error:
+        raise HTTPException(status_code=504, detail="Description provider timed out.") from error
+    except (openai.APIConnectionError, openai.RateLimitError,
+            openai.AuthenticationError, openai.PermissionDeniedError) as error:
+        raise HTTPException(status_code=503, detail="Description provider is unavailable.") from error
+    except openai.APIStatusError as error:
+        raise HTTPException(status_code=502, detail="Description provider rejected the request.") from error
     return {"product_description": description}
